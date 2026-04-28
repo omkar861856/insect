@@ -30,7 +30,10 @@ FROM nginx:alpine
 # Copy built web files
 COPY --from=builder /app/web /usr/share/nginx/html
 
-# Expose port 80
-EXPOSE 80
+# Update Nginx to listen on port 8080
+RUN sed -i 's/listen  80;/listen  8080;/g' /etc/nginx/conf.d/default.conf
+
+# Expose port 8080
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]

@@ -11,7 +11,7 @@ services:
       - "traefik.http.routers.calculator.rule=Host(`calculator.ecotron.co.in`)"
       - "traefik.http.routers.calculator.entrypoints=websecure"
       - "traefik.http.routers.calculator.tls.certresolver=myresolver"
-      - "traefik.http.services.calculator.loadbalancer.server.port=80"
+      - "traefik.http.services.calculator.loadbalancer.server.port=8080"
 
 networks:
   traefik:
