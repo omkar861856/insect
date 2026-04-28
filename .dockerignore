@@ -1,0 +1,11 @@
+node_modules
+.git
+.github
+output
+web/insect.js
+web/jquery.min.js
+web/jquery.terminal.min.js
+web/jquery.mousewheel-min.js
+web/terminal.css
+web/keyboardevent-key-polyfill.js
+*.log

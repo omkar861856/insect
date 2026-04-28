@@ -1,144 +1,192 @@
-html {
-    font-family: 'Exo 2', sans-serif;
-    background-color: #ECF0F1;
+:root {
+    --primary: #6366f1;
+    --secondary: #a855f7;
+    --accent: #ec4899;
+    --bg-dark: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-.github-corner svg {
-    fill: #272822;
-    color: #ECF0F1;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+    background-attachment: fixed;
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 body {
-    font-size: 1.2em;
-    margin: 0px;
-    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
 }
 
 #content {
-    max-width: 90%;
-    width: 850px;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 900px;
+    z-index: 10;
 }
 
-h1 {
-    font-weight: 400;
-    font-size: 3em;
-    line-height: 100%;
-    margin-bottom: 0;
-    padding: 0;
-}
-
-p.desc {
-    margin-top: 0.6em;
-    margin-bottom: 1.8em;
-}
-
-p.links {
-    font-size: 0.8em;
+header {
     text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.8s ease-out;
 }
 
-p.links a {
-    color: #aaa;
+#insect-logo {
+    max-width: 300px;
+    height: auto;
+    filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.5));
+    margin-bottom: 1.5rem;
 }
+
+.desc {
+    font-size: 1.25rem;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.terminal-container {
+    position: relative;
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
 
 #terminal {
-    border-radius: 4px;
-    box-shadow: 0px 3px 8px #1a1a1a;
+    height: 500px;
+    border: none !important;
+    box-shadow: none !important;
 }
 
-/* jQuery Terminal */
-
+/* Override jQuery Terminal styles */
 .terminal {
-    --color: #F8F8F2;
-    --background: #272822;
-    --size: 1.6;
-    --link-color: #F8F8F2;
-    font-family: 'Fira Mono', monospace;
+    --background: transparent !important;
+    --color: #e2e8f0 !important;
+    --size: 1.1;
+    font-family: 'Fira Code', 'Fira Mono', monospace !important;
+    padding: 0 !important;
 }
 
-.terminal, .terminal .terminal-fill {
-    padding: 1.2em;
-    margin-bottom: 2em;
+.terminal .cmd {
+    background: transparent !important;
 }
 
-.terminal,
-.terminal-output > :not(.raw) span,
-.terminal-output > :not(.raw) a,
-.terminal-output > :not(.raw) div,
-.cmd,
-.cmd span,
-.cmd div {
-    font-family: 'Fira Mono', monospace;
+.terminal .prompt {
+    color: var(--primary) !important;
+    text-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
 }
 
-.terminal-output > div {
-    padding-bottom: 1em;
+footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    animation: fadeIn 1s ease-out 0.5s both;
 }
 
-.terminal-output > div.terminal-command {
-    padding-bottom: 0em;
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
-.prompt {
-    font-weight: bold;
-    /* workaround for https://github.com/sharkdp/insect/issues/78 */
-    letter-spacing: 1px;
+.links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
 }
 
-/* syntax highlighting */
-
-.hl-emphasized {
-    font-weight: 700 !important;
+.links a:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
 }
 
-.hl-error {
-    color: #F92672 !important;
+/* Animations */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.hl-value {
-    color: #66D9EF !important;
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.hl-identifier {
-    color: #FD971F !important;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.hl-function {
-    font-style: italic !important;
+/* Custom scrollbar for terminal */
+.terminal::-webkit-scrollbar {
+    width: 8px;
 }
 
-.hl-unit {
-    color: #A6E22E !important;
+.terminal::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-/* Github Badge */
+.terminal::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
 
-.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+.terminal::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
 
-@media (prefers-color-scheme: dark) {
-    html {
-        background: #1A1A1A;
-        color: #ECF0F1;
-    }
+/* Syntax Highlighting overrides */
+.hl-emphasized { color: #fff !important; font-weight: 600 !important; }
+.hl-error { color: #f43f5e !important; }
+.hl-value { color: #38bdf8 !important; }
+.hl-identifier { color: #fbbf24 !important; }
+.hl-unit { color: #4ade80 !important; }
 
-    .github-corner svg {
-        fill: #ECF0F1;
-        color: #1A1A1A;
-    }
-
-    #terminal {
-        box-shadow: 0px 3px 8px #121212;
-    }
-
-    #insect-logo {
-        color: black;
-        filter: drop-shadow(0 0 10px #ECF0F1);
-    }
-
-    #insect-logo > path {
-        display: none;
-    }
+@media (max-width: 640px) {
+    #terminal { height: 400px; }
+    .desc { font-size: 1rem; }
+    .terminal-container { padding: 1rem; }
 }
