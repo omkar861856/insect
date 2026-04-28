@@ -36,7 +36,7 @@ build or run Calculator on Node.js 18:
 ```Dockerfile
 FROM node:18
 
-WORKDIR /usr/src/calculator
+WORKDIR /app
 
 COPY . .
 
@@ -46,19 +46,19 @@ RUN npm install && \
 CMD ["node", "index.cjs"]
 ```
 
-After creating the image (`docker build -t sharkdp/calculator .`), you can create
+After creating the image (`docker build -t calculator .`), you can create
 the container and copy out the build artifacts:
 
-    docker create sharkdp/calculator:latest
+    docker create calculator:latest
     # copy SHA (e.g. 71f0797703e8)
-    docker cp 71f0797703e8:/usr/src/calculator/index.cjs .
-    docker cp -r 71f0797703e8:/usr/src/calculator/node_modules .
+    docker cp 71f0797703e8:/app/index.cjs .
+    docker cp -r 71f0797703e8:/app/node_modules .
 
 
 To directly run Calculator inside Docker (paying a heavy startup time penalty), you
 can use:
 
-    docker run -it --rm -v ~/.local/share/calculator-history:/root/.local/share/calculator-history sharkdp/calculator:latest
+    docker run -it --rm -v ~/.local/share/calculator-history:/root/.local/share/calculator-history calculator:latest
 
 Maintainers
 -----------

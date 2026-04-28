@@ -19,6 +19,12 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            if [ -d "/root/insect" ] && [ ! -d "/root/calculator" ]; then
+              mv /root/insect /root/calculator
+            fi
+            if [ ! -d "/root/calculator" ]; then
+              git clone https://github.com/omkar861856/insect.git /root/calculator
+            fi
             cd /root/calculator
             git pull
             docker compose up -d --build
