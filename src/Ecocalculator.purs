@@ -1,4 +1,4 @@
-module Calculator
+module Ecoecocalculator
   ( repl
   , initialEnvironment
   , supportedUnits
@@ -21,15 +21,15 @@ import Data.Maybe (maybe)
 
 import Parsing (Position(..), parseErrorPosition, parseErrorMessage)
 
-import Calculator.Parser (Dictionary(..), (==>),
-                      normalUnitDict, imperialUnitDict, parseCalculator)
-import Calculator.Parser as P
-import Calculator.Interpreter (MessageType(..), Message(..), runCalculator)
-import Calculator.Environment (Environment, StoredValue(..))
-import Calculator.Environment as E
-import Calculator.Format (Formatter, format)
-import Calculator.Format as F
-import Calculator.PrettyPrint (prettyQuantity)
+import Ecoecocalculator.Parser (Dictionary(..), (==>),
+                      normalUnitDict, imperialUnitDict, parseEcoecocalculator)
+import Ecoecocalculator.Parser as P
+import Ecoecocalculator.Interpreter (MessageType(..), Message(..), runEcoecocalculator)
+import Ecoecocalculator.Environment (Environment, StoredValue(..))
+import Ecoecocalculator.Environment as E
+import Ecoecocalculator.Format (Formatter, format)
+import Ecoecocalculator.Format as F
+import Ecoecocalculator.PrettyPrint (prettyQuantity)
 
 -- | List of all supported units
 supportedUnits ∷ Array String
@@ -46,12 +46,12 @@ msgTypeToString Error    = "error"
 msgTypeToString Value    = "value"
 msgTypeToString ValueSet = "value-set"
 
--- | Run Calculator, REPL-style.
+-- | Run Ecoecocalculator, REPL-style.
 repl ∷ Formatter → Environment → String → { msg ∷ String
                                           , newEnv ∷ Environment
                                           , msgType ∷ String     }
 repl fmt env userInput =
-  case parseCalculator env userInput of
+  case parseEcoecocalculator env userInput of
     Left pErr →
       let Position rec = parseErrorPosition pErr
       in
@@ -64,7 +64,7 @@ repl fmt env userInput =
          , msgType: "error"
          , newEnv: env }
     Right statement →
-      let ans = runCalculator env statement
+      let ans = runEcoecocalculator env statement
       in case ans.msg of
            Message msgType msg →
              { msgType: msgTypeToString msgType

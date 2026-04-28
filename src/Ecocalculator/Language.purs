@@ -1,5 +1,5 @@
--- | This module defines the AST for Calculator.
-module Calculator.Language
+-- | This module defines the AST for Ecoecocalculator.
+module Ecoecocalculator.Language
   ( EvalError(..)
   , Identifier
   , BinOp(..)
@@ -65,7 +65,7 @@ instance Show Expression where
   show (Apply fn xs)       = "(Apply " <> show fn <> " " <> show xs <> ")"
   show (BinOp op x y)      = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
 
--- | A command in Calculator.
+-- | A command in Ecoecocalculator.
 data Command
  = Help
  | Reset
@@ -78,7 +78,7 @@ derive instance Eq Command
 derive instance Generic Command _
 instance Show Command where show = genericShow
 
--- | A statement in Calculator.
+-- | A statement in Ecoecocalculator.
 data Statement
  = Expression Expression
  | VariableAssignment Identifier Expression

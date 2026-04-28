@@ -8,7 +8,7 @@ FAQ
     and from other temperature units. This additive offset leads to all kinds of ambiguities when
     performing calculations in these units. Adding two temperatures in Celsius, for example, is
     only meaningful if one of them is seen as an offset value (rather than as an absolute
-    temperature). Calculator is primarily a scientific calculator (as opposed to a unit conversion
+    temperature). Ecoecocalculator is primarily a scientific ecocalculator (as opposed to a unit conversion
     tool) and therefore focuses on getting physical calculations right.
 
     Even though *°C* and *°F* are not supported as built-in units, there are helper functions to
@@ -48,7 +48,7 @@ FAQ
 
   - What is the internal numerical precision?
 
-    By default, Calculator shows 6 significant digits in the result of the calculation. However,
+    By default, Ecoecocalculator shows 6 significant digits in the result of the calculation. However,
     the internal numerical precision is much higher (30 digits).
 
   - How does the conversion operator work?

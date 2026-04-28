@@ -1,4 +1,4 @@
-module Calculator.Functions
+module Ecoecocalculator.Functions
   ( fromCelsius
   , toCelsius
   , fromFahrenheit

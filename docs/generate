@@ -25,11 +25,11 @@ pandoc --from="$input_format" \
 # Generate manpage
 pandoc --from="$input_format" \
        --to=man \
-       --output=calculator.1 \
+       --output=ecocalculator.1 \
        --standalone \
        --reference-links \
        -V section=1 \
-       -V header="calculator - scientific calculator" \
+       -V header="ecocalculator - scientific ecocalculator" \
        manpage-header.md \
        features.md \
        reference-syntax.md \

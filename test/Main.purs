@@ -23,18 +23,18 @@ import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian,
                    day, tonne, euro)
 
-import Calculator.Language (BinOp(..), Expression(..), Statement(..))
-import Calculator.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
-                      normalUnitDict, imperialUnitDict, parseCalculator)
-import Calculator.Environment (StorageType(..), StoredValue(..), Environment,
+import Ecoecocalculator.Language (BinOp(..), Expression(..), Statement(..))
+import Ecoecocalculator.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
+                      normalUnitDict, imperialUnitDict, parseEcoecocalculator)
+import Ecoecocalculator.Environment (StorageType(..), StoredValue(..), Environment,
                            initialEnvironment)
-import Calculator.Format (format, fmtPlain)
-import Calculator.PrettyPrint (pretty)
-import Calculator (repl)
+import Ecoecocalculator.Format (format, fmtPlain)
+import Ecoecocalculator.PrettyPrint (pretty)
+import Ecoecocalculator (repl)
 
 shouldParseAs ∷ Statement → String → Aff Unit
 shouldParseAs expected input =
-  case parseCalculator initialEnvironment input of
+  case parseEcoecocalculator initialEnvironment input of
     Left err →
       case parseErrorPosition err of
         Position pos →
@@ -54,7 +54,7 @@ allParseAs expected = traverse_ (shouldParseAs expected)
 
 shouldFail ∷ String → Aff Unit
 shouldFail input =
-  case parseCalculator initialEnvironment input of
+  case parseEcoecocalculator initialEnvironment input of
    Left _ → pure unit
    Right _ → fail $ "input is expected to throw a parse error: '" <> input <> "'"
 
@@ -70,7 +70,7 @@ expectOutput env expected inp =
 
 prettyPrintCheck ∷ String → Aff Unit
 prettyPrintCheck input =
-  case parseCalculator initialEnvironment input of
+  case parseEcoecocalculator initialEnvironment input of
     Left err →
       case parseErrorPosition err of
         Position pos →
@@ -814,7 +814,7 @@ main = launchAff_ $ runSpec [consoleReporter] do
         ]
 
   let pretty' str =
-        case parseCalculator initialEnvironment str of
+        case parseEcoecocalculator initialEnvironment str of
           Right (Expression expr) → format fmtPlain (pretty expr)
           _ → "Error"
 

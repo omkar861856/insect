@@ -4,13 +4,13 @@ Written by David Peter <mail@david-peter.de>.
 
 # REPORTING BUGS
 
-Please report bugs on GitHub: <https://github.com/sharkdp/calculator>.
+Please report bugs on GitHub: <https://github.com/sharkdp/ecocalculator>.
 
 # COPYRIGHT
 
-calculator is MIT-licensed. For details, see <https://github.com/sharkdp/calculator>.
+ecocalculator is MIT-licensed. For details, see <https://github.com/sharkdp/ecocalculator>.
 
 # SEE ALSO
 
-  - Full documentation at <https://github.com/sharkdp/calculator>.
-  - Web version at <https://calculator.sh>.
+  - Full documentation at <https://github.com/sharkdp/ecocalculator>.
+  - Web version at <https://ecocalculator.sh>.

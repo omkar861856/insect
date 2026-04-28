@@ -44,7 +44,7 @@ header {
     animation: fadeInDown 0.8s ease-out;
 }
 
-#calculator-logo {
+#ecocalculator-logo {
     max-width: 300px;
     height: auto;
     filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.5));

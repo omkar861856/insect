@@ -1,43 +1,43 @@
 #!/usr/bin/env node
 
-import * as Calculator from "./output/Calculator/index.js";
+import * as Ecocalculator from "./output/Ecocalculator/index.js";
 import * as path from "path";
 import * as xdgBasedir from "xdg-basedir";
 
-var calculatorEnv = Calculator.initialEnvironment;
+var ecocalculatorEnv = Ecocalculator.initialEnvironment;
 
 function usage() {
-  console.log("Usage:  calculator [EXPR]");
+  console.log("Usage:  ecocalculator [EXPR]");
   process.exit(1);
 }
 
-function runCalculator(fmt, line) {
+function runEcocalculator(fmt, line) {
   var lineTrimmed = line.trim();
   if (lineTrimmed === "" || lineTrimmed[0] === "#") {
     return undefined;
   }
 
-  // Run calculator
-  var res = Calculator.repl(fmt)(calculatorEnv)(line);
+  // Run ecocalculator
+  var res = Ecocalculator.repl(fmt)(ecocalculatorEnv)(line);
 
   // Update environment
-  calculatorEnv = res.newEnv;
+  ecocalculatorEnv = res.newEnv;
 
   return res;
 }
 
 // Top-level await is not supported in Node 12 and earlier.
 (async function() {
-  if (process.env.CALCULATOR_NO_RC !== "true") {
+  if (process.env.ECOCALCULATOR_NO_RC !== "true") {
     var [util, lineReader, os] = await Promise.all([import("util"), import("line-reader"), import("os")]);
 
-    var rcFilePaths = [path.join(xdgBasedir.config, "calculator/calculatorrc"), path.join(os.homedir(), ".calculatorrc")];
+    var rcFilePaths = [path.join(xdgBasedir.config, "ecocalculator/ecocalculatorrc"), path.join(os.homedir(), ".ecocalculatorrc")];
     var eachLine = util.promisify(lineReader.eachLine);
 
     for (const rcFilePath of rcFilePaths) {
       try {
         await eachLine(rcFilePath, function(line) {
-          var res = runCalculator(Calculator.fmtPlain, line);
+          var res = runEcocalculator(Ecocalculator.fmtPlain, line);
           // We really only care when it breaks
           if (res && res.msgType === "error") {
             console.error(res.msg);
@@ -59,7 +59,7 @@ function runCalculator(fmt, line) {
     usage();
   } else if (args.length !== 0) {
     // Execute a single command
-    var res = runCalculator(Calculator.fmtPlain, args.join(" "));
+    var res = runEcocalculator(Ecocalculator.fmtPlain, args.join(" "));
     if (res.msgType === "value" || res.msgType === "info") {
       console.log(res.msg);
     } else if (res.msgType === "error") {
@@ -85,7 +85,7 @@ function runCalculator(fmt, line) {
     }
 
     // Open the history file for reading and appending.
-    var historyFd = fs.openSync(path.join(xdgBasedir.data, "calculator-history"), 'a+');
+    var historyFd = fs.openSync(path.join(xdgBasedir.data, "ecocalculator-history"), 'a+');
 
     var maxHistoryLength = 5000;
 
@@ -96,10 +96,10 @@ function runCalculator(fmt, line) {
       history: fs.readFileSync(historyFd, "utf8").split("\n").slice(0, -1).reverse().slice(0, maxHistoryLength),
       historySize: maxHistoryLength,
       completer: function(line) {
-        var identifiers = Calculator.identifiers(calculatorEnv);
+        var identifiers = Ecocalculator.identifiers(ecocalculatorEnv);
 
         var keywords =
-          identifiers.concat(Calculator.functions(calculatorEnv), Calculator.supportedUnits, Calculator.commands);
+          identifiers.concat(Ecocalculator.functions(ecocalculatorEnv), Ecocalculator.supportedUnits, Ecocalculator.commands);
 
         var lastWord = line;
         if (line.trim() !== "") {
@@ -121,7 +121,7 @@ function runCalculator(fmt, line) {
     rl.setPrompt(prompt, 4);
 
     rl.on('line', function(line) {
-      var res = runCalculator(Calculator.fmtConsole, line);
+      var res = runEcocalculator(Ecocalculator.fmtConsole, line);
 
       if (res) {
         if (res.msgType === "quit") {
@@ -175,7 +175,7 @@ function runCalculator(fmt, line) {
 
     // Read from non-interactive stream (shell pipe)
     lineReader.eachLine(process.stdin, function(line) {
-      var res = runCalculator(Calculator.fmtPlain, line);
+      var res = runEcocalculator(Ecocalculator.fmtPlain, line);
       if (res) {
         // Only output values and halt on errors. Ignore 'info' and 'value-set'
         // message types.

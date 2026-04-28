@@ -1,5 +1,5 @@
--- | This module defines a pretty printer for Calculator expressions.
-module Calculator.PrettyPrint
+-- | This module defines a pretty printer for Ecoecocalculator expressions.
+module Ecoecocalculator.PrettyPrint
   ( pretty
   , prettyQuantity
   ) where
@@ -13,9 +13,9 @@ import Data.NonEmpty (NonEmpty)
 
 import Quantities as Q
 
-import Calculator.Language (Identifier, BinOp(..), Expression(..))
-import Calculator.Format (Markup)
-import Calculator.Format as F
+import Ecoecocalculator.Language (Identifier, BinOp(..), Expression(..))
+import Ecoecocalculator.Format (Markup)
+import Ecoecocalculator.Format as F
 
 -- | Pretty print a single operator.
 prettyOp ∷ BinOp → Markup
@@ -77,7 +77,7 @@ withParens ∷ Expression → Markup
 withParens e@(BinOp Mul (Scalar _) (Unit _)) = pretty e
 withParens e = withParens' e
 
--- | Pretty print an Calculator expression.
+-- | Pretty print an Ecoecocalculator expression.
 pretty ∷ Expression → Markup
 pretty (Scalar n)                      = prettyScalar n
 pretty (Unit u)                        = prettyUnit u

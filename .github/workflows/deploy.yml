@@ -19,12 +19,12 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            if [ -d "/root/insect" ] && [ ! -d "/root/calculator" ]; then
-              mv /root/insect /root/calculator
+            if [ -d "/root/calculator" ] && [ ! -d "/root/ecocalculator" ]; then
+              mv /root/calculator /root/ecocalculator
             fi
-            if [ ! -d "/root/calculator" ]; then
-              git clone https://github.com/omkar861856/insect.git /root/calculator
+            if [ ! -d "/root/ecocalculator" ]; then
+              git clone https://github.com/omkar861856/insect.git /root/ecocalculator
             fi
-            cd /root/calculator
+            cd /root/ecocalculator
             git pull
             docker compose up -d --build --remove-orphans

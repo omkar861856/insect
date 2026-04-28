@@ -1,5 +1,5 @@
--- | A markup format for Calculator.
-module Calculator.Format
+-- | A markup format for Ecoecocalculator.
+module Ecoecocalculator.Format
   ( OutputType
   , FormatType
   , FormattedString

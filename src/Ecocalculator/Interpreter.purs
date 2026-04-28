@@ -1,8 +1,8 @@
--- | This module defines the interpreter for Calculator.
-module Calculator.Interpreter
+-- | This module defines the interpreter for Ecoecocalculator.
+module Ecoecocalculator.Interpreter
   ( MessageType(..)
   , Message(..)
-  , runCalculator
+  , runEcoecocalculator
   ) where
 
 import Prelude hiding (degree)
@@ -20,11 +20,11 @@ import Data.NonEmpty (NonEmpty, (:|))
 import Data.String (toLower)
 import Data.Traversable (traverse)
 import Data.Tuple (Tuple(..), fst, snd)
-import Calculator.Environment (Environment, StorageType(..), StoredValue(..), FunctionDescription(..), StoredFunction(..), initialEnvironment, MathFunction)
-import Calculator.Format (FormattedString, Markup)
-import Calculator.Format as F
-import Calculator.Language (BinOp(..), Expression(..), Command(..), Identifier, Statement(..), EvalError(..))
-import Calculator.PrettyPrint (pretty, prettyQuantity)
+import Ecoecocalculator.Environment (Environment, StorageType(..), StoredValue(..), FunctionDescription(..), StoredFunction(..), initialEnvironment, MathFunction)
+import Ecoecocalculator.Format (FormattedString, Markup)
+import Ecoecocalculator.Format as F
+import Ecoecocalculator.Language (BinOp(..), Expression(..), Command(..), Identifier, Statement(..), EvalError(..))
+import Ecoecocalculator.PrettyPrint (pretty, prettyQuantity)
 import Quantities (Quantity, ConversionError(..))
 import Quantities as Q
 import Control.Apply (lift2)
@@ -242,9 +242,9 @@ prettyPrintFunction name argNames =
   where
     fArgs = intercalate [ F.text ", " ] ((\a → [ F.ident a ]) <$> argNames)
 
--- | Run a single statement of an Calculator program.
-runCalculator ∷ Environment → Statement → Response
-runCalculator env (Expression e) =
+-- | Run a single statement of an Ecoecocalculator program.
+runEcoecocalculator ∷ Environment → Statement → Response
+runEcoecocalculator env (Expression e) =
   case evalAndSimplify env e of
     Left evalErr → errorWithInput [] e env evalErr
     Right value →
@@ -256,7 +256,7 @@ runCalculator env (Expression e) =
           in env { values = insert "ans" storedValue (insert "_" storedValue env.values) }
       }
 
-runCalculator env (VariableAssignment name val) =
+runEcoecocalculator env (VariableAssignment name val) =
   case evalAndSimplify env val of
     Left evalErr → errorWithInput [ F.ident name, F.text " = " ] val env evalErr
     Right value →
@@ -271,7 +271,7 @@ runCalculator env (VariableAssignment name val) =
                         , functions = delete name env.functions }
           }
 
-runCalculator env (FunctionAssignment name argNames expr) =
+runEcoecocalculator env (FunctionAssignment name argNames expr) =
   if isConstant env name
     then
       errorWithInput (prettyPrintFunction name argNames) expr env (RedefinedConstantError name)
@@ -300,7 +300,7 @@ runCalculator env (FunctionAssignment name argNames expr) =
                            , functions = delete name env'.functions
                            }
 
-runCalculator env (PrettyPrintFunction name) =
+runEcoecocalculator env (PrettyPrintFunction name) =
   { msg, newEnv: env }
   where
     msg =
@@ -321,8 +321,8 @@ runCalculator env (PrettyPrintFunction name) =
           Message Info $ (F.optional <$> ([ F.text "  " ] <> prettyPrintFunction name args)) <> pretty expr
         Nothing → Message Error [ F.text "Unknown function" ]
 
-runCalculator env (Command Help) = { msg: Message Info
-  [ F.emph "calculator", F.text " evaluates mathematical expressions that can", F.nl
+runEcoecocalculator env (Command Help) = { msg: Message Info
+  [ F.emph "ecocalculator", F.text " evaluates mathematical expressions that can", F.nl
   , F.text "involve physical quantities. You can start by trying", F.nl
   , F.text "one of these examples:", F.nl
   , F.text "", F.nl
@@ -337,10 +337,10 @@ runCalculator env (Command Help) = { msg: Message Info
   , F.emph "  > ", F.val "40000", F.text " ", F.unit "km", F.text " / ", F.ident "c", F.text " -> ", F.unit "ms", F.text "    "
   , F.emph "  > ", F.ident "pi", F.text " * ", F.ident "r", F.text "^", F.val "2", F.text " -> ", F.unit "m", F.text "^", F.val "2", F.nl
   , F.text "", F.nl
-  , F.text "Full documentation: https://github.com/sharkdp/calculator"
+  , F.text "Full documentation: https://github.com/sharkdp/ecocalculator"
   ], newEnv: env }
 
-runCalculator env (Command List) =
+runEcoecocalculator env (Command List) =
   { msg: Message Info list, newEnv: env }
   where
     storedValue (StoredValue _ value) = value
@@ -360,12 +360,12 @@ runCalculator env (Command List) =
                           (singleton <<< F.ident <<< fst) <$> kvPairs
           val = storedValue (snd (head kvPairs))
 
-runCalculator _ (Command Reset) =
+runEcoecocalculator _ (Command Reset) =
   { msg: Message Info [F.text "Environment has been reset."]
   , newEnv: initialEnvironment }
 
-runCalculator _ (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
+runEcoecocalculator _ (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
 
-runCalculator env (Command Copy) = { msg: MCopy, newEnv: env }
+runEcoecocalculator env (Command Copy) = { msg: MCopy, newEnv: env }
 
-runCalculator env (Command Clear) = { msg: MClear, newEnv: env }
+runEcoecocalculator env (Command Clear) = { msg: MClear, newEnv: env }
