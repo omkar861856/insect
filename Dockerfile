@@ -1,13 +1,12 @@
 # Stage 1: Build
-FROM node:18-slim AS builder
+FROM node:18 AS builder
 
 WORKDIR /app
 
-# Install system dependencies for PureScript/Spago
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     git \
-    libncurses5 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
@@ -31,7 +30,7 @@ FROM nginx:alpine
 COPY --from=builder /app/web /usr/share/nginx/html
 
 # Update Nginx to listen on port 8080
-RUN sed -i 's/listen  80;/listen  8080;/g' /etc/nginx/conf.d/default.conf
+RUN sed -i 's/80;/8080;/g' /etc/nginx/conf.d/default.conf
 
 # Expose port 8080
 EXPOSE 8080
