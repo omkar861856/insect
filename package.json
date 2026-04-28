@@ -1,5 +1,5 @@
 {
-  "name": "insect",
+  "name": "calculator",
   "version": "5.9.0",
   "description": "High precision scientific calculator with support for physical units",
   "author": "David Peter <mail@david-peter.de>",
@@ -10,20 +10,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sharkdp/insect.git"
+    "url": "git+https://github.com/omkar861856/calculator.git"
   },
-  "homepage": "https://github.com/sharkdp/insect",
+  "homepage": "https://github.com/omkar861856/calculator",
   "bin": {
-    "insect": "./index.cjs"
+    "calculator": "./index.cjs"
   },
-  "man": "docs/insect.1",
+  "man": "docs/calculator.1",
   "directories": {
     "test": "test"
   },
   "files": [
-    "docs/insect.1",
-    "web/media/insect.svg",
-    "insect.desktop",
+    "docs/calculator.1",
+    "web/media/calculator.svg",
+    "calculator.desktop",
     "LICENSE_THIRDPARTY"
   ],
   "scripts": {
@@ -31,7 +31,7 @@
     "start": "node copy && run-p server esbuild:watch",
     "esbuild:watch": "spago build -w --then 'npm run esbuild:browser'",
     "esbuild": "npm run esbuild:browser && npm run esbuild:node",
-    "esbuild:browser": "esbuild output/Insect/index.js --bundle --minify --outfile=web/insect.js --target=es6 --global-name=Insect",
+    "esbuild:browser": "esbuild output/Calculator/index.js --bundle --minify --outfile=web/calculator.js --target=es6 --global-name=Calculator",
     "esbuild:node": "esbuild index.dev.js --bundle --minify --outfile=index.cjs --target=node10 --platform=node --format=iife --external:./node_modules/*",
     "build": "spago build && npm run esbuild && node copy",
     "prepack": "spago build && npm run esbuild:node",
@@ -39,7 +39,7 @@
     "test": "spago -x test.dhall test"
   },
   "bugs": {
-    "url": "https://github.com/sharkdp/insect/issues"
+    "url": "https://github.com/omkar861856/calculator/issues"
   },
   "dependencies": {
     "clipboardy": "^2.3.0",

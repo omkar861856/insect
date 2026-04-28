@@ -1,4 +1,4 @@
-name: Deploy Insect
+name: Deploy Calculator
 
 on:
   push:
@@ -19,6 +19,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /root/insect
+            cd /root/calculator
             git pull
             docker compose up -d --build

@@ -1,4 +1,4 @@
-module Insect.Environment
+module Calculator.Environment
   ( StorageType(..)
   , StoredValue(..)
   , MathFunction
@@ -22,8 +22,8 @@ import Data.Tuple (Tuple(..))
 import Quantities (Quantity, ConversionError)
 import Quantities as Q
 
-import Insect.Language (EvalError(..), Identifier, Expression)
-import Insect.Functions as F
+import Calculator.Language (EvalError(..), Identifier, Expression)
+import Calculator.Functions as F
 
 -- | Values can be stored as constants, as constants that are not
 -- | displayed when calling `list`, and as user-defined quantities.

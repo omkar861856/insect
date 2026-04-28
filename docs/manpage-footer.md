@@ -4,13 +4,13 @@ Written by David Peter <mail@david-peter.de>.
 
 # REPORTING BUGS
 
-Please report bugs on GitHub: <https://github.com/sharkdp/insect>.
+Please report bugs on GitHub: <https://github.com/sharkdp/calculator>.
 
 # COPYRIGHT
 
-insect is MIT-licensed. For details, see <https://github.com/sharkdp/insect>.
+calculator is MIT-licensed. For details, see <https://github.com/sharkdp/calculator>.
 
 # SEE ALSO
 
-  - Full documentation at <https://github.com/sharkdp/insect>.
-  - Web version at <https://insect.sh>.
+  - Full documentation at <https://github.com/sharkdp/calculator>.
+  - Web version at <https://calculator.sh>.

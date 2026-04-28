@@ -1,8 +1,8 @@
--- | This module defines the interpreter for Insect.
-module Insect.Interpreter
+-- | This module defines the interpreter for Calculator.
+module Calculator.Interpreter
   ( MessageType(..)
   , Message(..)
-  , runInsect
+  , runCalculator
   ) where
 
 import Prelude hiding (degree)
@@ -20,11 +20,11 @@ import Data.NonEmpty (NonEmpty, (:|))
 import Data.String (toLower)
 import Data.Traversable (traverse)
 import Data.Tuple (Tuple(..), fst, snd)
-import Insect.Environment (Environment, StorageType(..), StoredValue(..), FunctionDescription(..), StoredFunction(..), initialEnvironment, MathFunction)
-import Insect.Format (FormattedString, Markup)
-import Insect.Format as F
-import Insect.Language (BinOp(..), Expression(..), Command(..), Identifier, Statement(..), EvalError(..))
-import Insect.PrettyPrint (pretty, prettyQuantity)
+import Calculator.Environment (Environment, StorageType(..), StoredValue(..), FunctionDescription(..), StoredFunction(..), initialEnvironment, MathFunction)
+import Calculator.Format (FormattedString, Markup)
+import Calculator.Format as F
+import Calculator.Language (BinOp(..), Expression(..), Command(..), Identifier, Statement(..), EvalError(..))
+import Calculator.PrettyPrint (pretty, prettyQuantity)
 import Quantities (Quantity, ConversionError(..))
 import Quantities as Q
 import Control.Apply (lift2)
@@ -242,9 +242,9 @@ prettyPrintFunction name argNames =
   where
     fArgs = intercalate [ F.text ", " ] ((\a → [ F.ident a ]) <$> argNames)
 
--- | Run a single statement of an Insect program.
-runInsect ∷ Environment → Statement → Response
-runInsect env (Expression e) =
+-- | Run a single statement of an Calculator program.
+runCalculator ∷ Environment → Statement → Response
+runCalculator env (Expression e) =
   case evalAndSimplify env e of
     Left evalErr → errorWithInput [] e env evalErr
     Right value →
@@ -256,7 +256,7 @@ runInsect env (Expression e) =
           in env { values = insert "ans" storedValue (insert "_" storedValue env.values) }
       }
 
-runInsect env (VariableAssignment name val) =
+runCalculator env (VariableAssignment name val) =
   case evalAndSimplify env val of
     Left evalErr → errorWithInput [ F.ident name, F.text " = " ] val env evalErr
     Right value →
@@ -271,7 +271,7 @@ runInsect env (VariableAssignment name val) =
                         , functions = delete name env.functions }
           }
 
-runInsect env (FunctionAssignment name argNames expr) =
+runCalculator env (FunctionAssignment name argNames expr) =
   if isConstant env name
     then
       errorWithInput (prettyPrintFunction name argNames) expr env (RedefinedConstantError name)
@@ -300,7 +300,7 @@ runInsect env (FunctionAssignment name argNames expr) =
                            , functions = delete name env'.functions
                            }
 
-runInsect env (PrettyPrintFunction name) =
+runCalculator env (PrettyPrintFunction name) =
   { msg, newEnv: env }
   where
     msg =
@@ -321,8 +321,8 @@ runInsect env (PrettyPrintFunction name) =
           Message Info $ (F.optional <$> ([ F.text "  " ] <> prettyPrintFunction name args)) <> pretty expr
         Nothing → Message Error [ F.text "Unknown function" ]
 
-runInsect env (Command Help) = { msg: Message Info
-  [ F.emph "insect", F.text " evaluates mathematical expressions that can", F.nl
+runCalculator env (Command Help) = { msg: Message Info
+  [ F.emph "calculator", F.text " evaluates mathematical expressions that can", F.nl
   , F.text "involve physical quantities. You can start by trying", F.nl
   , F.text "one of these examples:", F.nl
   , F.text "", F.nl
@@ -337,10 +337,10 @@ runInsect env (Command Help) = { msg: Message Info
   , F.emph "  > ", F.val "40000", F.text " ", F.unit "km", F.text " / ", F.ident "c", F.text " -> ", F.unit "ms", F.text "    "
   , F.emph "  > ", F.ident "pi", F.text " * ", F.ident "r", F.text "^", F.val "2", F.text " -> ", F.unit "m", F.text "^", F.val "2", F.nl
   , F.text "", F.nl
-  , F.text "Full documentation: https://github.com/sharkdp/insect"
+  , F.text "Full documentation: https://github.com/sharkdp/calculator"
   ], newEnv: env }
 
-runInsect env (Command List) =
+runCalculator env (Command List) =
   { msg: Message Info list, newEnv: env }
   where
     storedValue (StoredValue _ value) = value
@@ -360,12 +360,12 @@ runInsect env (Command List) =
                           (singleton <<< F.ident <<< fst) <$> kvPairs
           val = storedValue (snd (head kvPairs))
 
-runInsect _ (Command Reset) =
+runCalculator _ (Command Reset) =
   { msg: Message Info [F.text "Environment has been reset."]
   , newEnv: initialEnvironment }
 
-runInsect _ (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
+runCalculator _ (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
 
-runInsect env (Command Copy) = { msg: MCopy, newEnv: env }
+runCalculator env (Command Copy) = { msg: MCopy, newEnv: env }
 
-runInsect env (Command Clear) = { msg: MClear, newEnv: env }
+runCalculator env (Command Clear) = { msg: MClear, newEnv: env }

@@ -3,7 +3,7 @@ Need help? See the following resources:
 - Spago documentation: https://github.com/purescript/spago
 - Dhall language tour: https://docs.dhall-lang.org/tutorials/Language-Tour.html
 -}
-{ name = "insect"
+{ name = "calculator"
 , dependencies =
   [ "arrays"
   , "bifunctors"

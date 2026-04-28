@@ -25,11 +25,11 @@ pandoc --from="$input_format" \
 # Generate manpage
 pandoc --from="$input_format" \
        --to=man \
-       --output=insect.1 \
+       --output=calculator.1 \
        --standalone \
        --reference-links \
        -V section=1 \
-       -V header="insect - scientific calculator" \
+       -V header="calculator - scientific calculator" \
        manpage-header.md \
        features.md \
        reference-syntax.md \

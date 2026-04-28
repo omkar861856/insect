@@ -1,5 +1,5 @@
--- | This module defines the AST for Insect.
-module Insect.Language
+-- | This module defines the AST for Calculator.
+module Calculator.Language
   ( EvalError(..)
   , Identifier
   , BinOp(..)
@@ -65,7 +65,7 @@ instance Show Expression where
   show (Apply fn xs)       = "(Apply " <> show fn <> " " <> show xs <> ")"
   show (BinOp op x y)      = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
 
--- | A command in Insect.
+-- | A command in Calculator.
 data Command
  = Help
  | Reset
@@ -78,7 +78,7 @@ derive instance Eq Command
 derive instance Generic Command _
 instance Show Command where show = genericShow
 
--- | A statement in Insect.
+-- | A statement in Calculator.
 data Statement
  = Expression Expression
  | VariableAssignment Identifier Expression

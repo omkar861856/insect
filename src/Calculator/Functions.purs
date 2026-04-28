@@ -1,4 +1,4 @@
-module Insect.Functions
+module Calculator.Functions
   ( fromCelsius
   , toCelsius
   , fromFahrenheit

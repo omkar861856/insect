@@ -1,5 +1,5 @@
--- | A markup format for Insect.
-module Insect.Format
+-- | A markup format for Calculator.
+module Calculator.Format
   ( OutputType
   , FormatType
   , FormattedString

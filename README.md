@@ -1,6 +1,6 @@
 ## Note: Please consider using the follow-up project instead: [Numbat](https://github.com/sharkdp/numbat).
 
-you can read more about why Insect has been rewritten from scratch [here](https://github.com/sharkdp/numbat/blob/master/assets/reasons-for-rewriting-in-rust.md).
+you can read more about why Calculator has been rewritten from scratch [here](https://github.com/sharkdp/numbat/blob/master/assets/reasons-for-rewriting-in-rust.md).
 
 ---
 
@@ -15,7 +15,7 @@ you can read more about why Insect has been rewritten from scratch [here](https:
 
 -->
 
-![insect](web/media/insect.png "insect - scientific calculator")
+![calculator](web/media/calculator.png "calculator - scientific calculator")
 
 A high-precision scientific calculator with full support for physical units.
 

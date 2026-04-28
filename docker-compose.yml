@@ -1,17 +1,17 @@
 services:
-  insect:
+  calculator:
     build: .
-    container_name: insect
+    container_name: calculator
     restart: unless-stopped
     networks:
       - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
-      - "traefik.http.routers.insect.rule=Host(`insect.ecotron.co.in`)"
-      - "traefik.http.routers.insect.entrypoints=websecure"
-      - "traefik.http.routers.insect.tls.certresolver=myresolver"
-      - "traefik.http.services.insect.loadbalancer.server.port=80"
+      - "traefik.http.routers.calculator.rule=Host(`calculator.ecotron.co.in`)"
+      - "traefik.http.routers.calculator.entrypoints=websecure"
+      - "traefik.http.routers.calculator.tls.certresolver=myresolver"
+      - "traefik.http.services.calculator.loadbalancer.server.port=80"
 
 networks:
   traefik:

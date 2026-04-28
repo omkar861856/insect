@@ -1,43 +1,43 @@
 #!/usr/bin/env node
 
-import * as Insect from "./output/Insect/index.js";
+import * as Calculator from "./output/Calculator/index.js";
 import * as path from "path";
 import * as xdgBasedir from "xdg-basedir";
 
-var insectEnv = Insect.initialEnvironment;
+var calculatorEnv = Calculator.initialEnvironment;
 
 function usage() {
-  console.log("Usage:  insect [EXPR]");
+  console.log("Usage:  calculator [EXPR]");
   process.exit(1);
 }
 
-function runInsect(fmt, line) {
+function runCalculator(fmt, line) {
   var lineTrimmed = line.trim();
   if (lineTrimmed === "" || lineTrimmed[0] === "#") {
     return undefined;
   }
 
-  // Run insect
-  var res = Insect.repl(fmt)(insectEnv)(line);
+  // Run calculator
+  var res = Calculator.repl(fmt)(calculatorEnv)(line);
 
   // Update environment
-  insectEnv = res.newEnv;
+  calculatorEnv = res.newEnv;
 
   return res;
 }
 
 // Top-level await is not supported in Node 12 and earlier.
 (async function() {
-  if (process.env.INSECT_NO_RC !== "true") {
+  if (process.env.CALCULATOR_NO_RC !== "true") {
     var [util, lineReader, os] = await Promise.all([import("util"), import("line-reader"), import("os")]);
 
-    var rcFilePaths = [path.join(xdgBasedir.config, "insect/insectrc"), path.join(os.homedir(), ".insectrc")];
+    var rcFilePaths = [path.join(xdgBasedir.config, "calculator/calculatorrc"), path.join(os.homedir(), ".calculatorrc")];
     var eachLine = util.promisify(lineReader.eachLine);
 
     for (const rcFilePath of rcFilePaths) {
       try {
         await eachLine(rcFilePath, function(line) {
-          var res = runInsect(Insect.fmtPlain, line);
+          var res = runCalculator(Calculator.fmtPlain, line);
           // We really only care when it breaks
           if (res && res.msgType === "error") {
             console.error(res.msg);
@@ -59,7 +59,7 @@ function runInsect(fmt, line) {
     usage();
   } else if (args.length !== 0) {
     // Execute a single command
-    var res = runInsect(Insect.fmtPlain, args.join(" "));
+    var res = runCalculator(Calculator.fmtPlain, args.join(" "));
     if (res.msgType === "value" || res.msgType === "info") {
       console.log(res.msg);
     } else if (res.msgType === "error") {
@@ -85,7 +85,7 @@ function runInsect(fmt, line) {
     }
 
     // Open the history file for reading and appending.
-    var historyFd = fs.openSync(path.join(xdgBasedir.data, "insect-history"), 'a+');
+    var historyFd = fs.openSync(path.join(xdgBasedir.data, "calculator-history"), 'a+');
 
     var maxHistoryLength = 5000;
 
@@ -96,10 +96,10 @@ function runInsect(fmt, line) {
       history: fs.readFileSync(historyFd, "utf8").split("\n").slice(0, -1).reverse().slice(0, maxHistoryLength),
       historySize: maxHistoryLength,
       completer: function(line) {
-        var identifiers = Insect.identifiers(insectEnv);
+        var identifiers = Calculator.identifiers(calculatorEnv);
 
         var keywords =
-          identifiers.concat(Insect.functions(insectEnv), Insect.supportedUnits, Insect.commands);
+          identifiers.concat(Calculator.functions(calculatorEnv), Calculator.supportedUnits, Calculator.commands);
 
         var lastWord = line;
         if (line.trim() !== "") {
@@ -121,7 +121,7 @@ function runInsect(fmt, line) {
     rl.setPrompt(prompt, 4);
 
     rl.on('line', function(line) {
-      var res = runInsect(Insect.fmtConsole, line);
+      var res = runCalculator(Calculator.fmtConsole, line);
 
       if (res) {
         if (res.msgType === "quit") {
@@ -175,7 +175,7 @@ function runInsect(fmt, line) {
 
     // Read from non-interactive stream (shell pipe)
     lineReader.eachLine(process.stdin, function(line) {
-      var res = runInsect(Insect.fmtPlain, line);
+      var res = runCalculator(Calculator.fmtPlain, line);
       if (res) {
         // Only output values and halt on errors. Ignore 'info' and 'value-set'
         // message types.

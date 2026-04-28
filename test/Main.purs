@@ -23,18 +23,18 @@ import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian,
                    day, tonne, euro)
 
-import Insect.Language (BinOp(..), Expression(..), Statement(..))
-import Insect.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
-                      normalUnitDict, imperialUnitDict, parseInsect)
-import Insect.Environment (StorageType(..), StoredValue(..), Environment,
+import Calculator.Language (BinOp(..), Expression(..), Statement(..))
+import Calculator.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
+                      normalUnitDict, imperialUnitDict, parseCalculator)
+import Calculator.Environment (StorageType(..), StoredValue(..), Environment,
                            initialEnvironment)
-import Insect.Format (format, fmtPlain)
-import Insect.PrettyPrint (pretty)
-import Insect (repl)
+import Calculator.Format (format, fmtPlain)
+import Calculator.PrettyPrint (pretty)
+import Calculator (repl)
 
 shouldParseAs ∷ Statement → String → Aff Unit
 shouldParseAs expected input =
-  case parseInsect initialEnvironment input of
+  case parseCalculator initialEnvironment input of
     Left err →
       case parseErrorPosition err of
         Position pos →
@@ -54,7 +54,7 @@ allParseAs expected = traverse_ (shouldParseAs expected)
 
 shouldFail ∷ String → Aff Unit
 shouldFail input =
-  case parseInsect initialEnvironment input of
+  case parseCalculator initialEnvironment input of
    Left _ → pure unit
    Right _ → fail $ "input is expected to throw a parse error: '" <> input <> "'"
 
@@ -70,7 +70,7 @@ expectOutput env expected inp =
 
 prettyPrintCheck ∷ String → Aff Unit
 prettyPrintCheck input =
-  case parseInsect initialEnvironment input of
+  case parseCalculator initialEnvironment input of
     Left err →
       case parseErrorPosition err of
         Position pos →
@@ -814,7 +814,7 @@ main = launchAff_ $ runSpec [consoleReporter] do
         ]
 
   let pretty' str =
-        case parseInsect initialEnvironment str of
+        case parseCalculator initialEnvironment str of
           Right (Expression expr) → format fmtPlain (pretty expr)
           _ → "Error"
 

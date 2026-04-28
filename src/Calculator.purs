@@ -1,4 +1,4 @@
-module Insect
+module Calculator
   ( repl
   , initialEnvironment
   , supportedUnits
@@ -21,15 +21,15 @@ import Data.Maybe (maybe)
 
 import Parsing (Position(..), parseErrorPosition, parseErrorMessage)
 
-import Insect.Parser (Dictionary(..), (==>),
-                      normalUnitDict, imperialUnitDict, parseInsect)
-import Insect.Parser as P
-import Insect.Interpreter (MessageType(..), Message(..), runInsect)
-import Insect.Environment (Environment, StoredValue(..))
-import Insect.Environment as E
-import Insect.Format (Formatter, format)
-import Insect.Format as F
-import Insect.PrettyPrint (prettyQuantity)
+import Calculator.Parser (Dictionary(..), (==>),
+                      normalUnitDict, imperialUnitDict, parseCalculator)
+import Calculator.Parser as P
+import Calculator.Interpreter (MessageType(..), Message(..), runCalculator)
+import Calculator.Environment (Environment, StoredValue(..))
+import Calculator.Environment as E
+import Calculator.Format (Formatter, format)
+import Calculator.Format as F
+import Calculator.PrettyPrint (prettyQuantity)
 
 -- | List of all supported units
 supportedUnits ∷ Array String
@@ -46,12 +46,12 @@ msgTypeToString Error    = "error"
 msgTypeToString Value    = "value"
 msgTypeToString ValueSet = "value-set"
 
--- | Run Insect, REPL-style.
+-- | Run Calculator, REPL-style.
 repl ∷ Formatter → Environment → String → { msg ∷ String
                                           , newEnv ∷ Environment
                                           , msgType ∷ String     }
 repl fmt env userInput =
-  case parseInsect env userInput of
+  case parseCalculator env userInput of
     Left pErr →
       let Position rec = parseErrorPosition pErr
       in
@@ -64,7 +64,7 @@ repl fmt env userInput =
          , msgType: "error"
          , newEnv: env }
     Right statement →
-      let ans = runInsect env statement
+      let ans = runCalculator env statement
       in case ans.msg of
            Message msgType msg →
              { msgType: msgTypeToString msgType

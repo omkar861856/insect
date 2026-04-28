@@ -1,5 +1,5 @@
--- | This module defines the parser for the Insect language.
-module Insect.Parser
+-- | This module defines the parser for the Calculator language.
+module Calculator.Parser
   ( DictEntry(..)
   , (==>)
   , Dictionary(..)
@@ -7,7 +7,7 @@ module Insect.Parser
   , prefixDict
   , normalUnitDict
   , imperialUnitDict
-  , parseInsect
+  , parseCalculator
   ) where
 
 import Prelude hiding (degree)
@@ -26,8 +26,8 @@ import Data.NonEmpty (NonEmpty, (:|))
 import Data.Semigroup.Foldable (foldl1, foldr1)
 import Data.String (fromCodePointArray, codePointFromChar, singleton)
 import Data.Tuple.Nested ((/\))
-import Insect.Environment (Environment, StoredFunction(..))
-import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..), Identifier)
+import Calculator.Environment (Environment, StoredFunction(..))
+import Calculator.Language (BinOp(..), Expression(..), Command(..), Statement(..), Identifier)
 import Quantities (DerivedUnit, (./))
 import Quantities as Q
 import Parsing (ParserT, Parser, ParseError, runParser, fail)
@@ -52,8 +52,8 @@ commands ∷ Array String
 commands = ["help", "?", "list", "ls", "ll", "reset", "clear", "cls", "quit", "exit", "copy", "cp"]
 
 -- | The language definition.
-insectLanguage ∷ LanguageDef
-insectLanguage = LanguageDef
+calculatorLanguage ∷ LanguageDef
+calculatorLanguage = LanguageDef
   { commentStart: ""
   , commentEnd: ""
   , commentLine: "#"
@@ -70,7 +70,7 @@ insectLanguage = LanguageDef
 
 -- | The actual token parser.
 token ∷ TokenParser
-token = makeTokenParser insectLanguage
+token = makeTokenParser calculatorLanguage
 
 -- | Parse something, inside of parens.
 parens ∷ ∀ a. P a → P a
@@ -480,7 +480,7 @@ expression env =
 fullExpression ∷ Environment → P Expression
 fullExpression env = whiteSpace *> expression env <* (eof <?> "end of input")
 
--- | Parse an Insect command.
+-- | Parse an Calculator command.
 command ∷ P Command
 command =
   (
@@ -522,7 +522,7 @@ assignment env = do
       when (n == "_" || n == "ans") $
         fail ("'" <> n <> "' is a reserved variable name")
 
--- | Parse a statement in the Insect language.
+-- | Parse a statement in the Calculator language.
 statement ∷ Environment → P Statement
 statement env =
       (Command <$> command)
@@ -530,6 +530,6 @@ statement env =
   <|> (try (whiteSpace *> (PrettyPrintFunction <$> function env) <* eof))
   <|> (Expression <$> fullExpression env)
 
--- | Run the Insect-parser on a `String` input.
-parseInsect ∷ Environment → String → Either ParseError Statement
-parseInsect env inp = runParser inp (statement env)
+-- | Run the Calculator-parser on a `String` input.
+parseCalculator ∷ Environment → String → Either ParseError Statement
+parseCalculator env inp = runParser inp (statement env)
